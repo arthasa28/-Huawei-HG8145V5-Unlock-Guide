@@ -77,7 +77,6 @@ Semua aplikasi berikut **WAJIB** dijalankan menggunakan hak akses **Administrato
 - Panda Flasher
 - Huawei-Downgrade-Tools.exe
 - Huawei-PON-Tools-HG8145V5.exe
-- RollBackCommand.bat
 
 Cara menjalankan:
 
