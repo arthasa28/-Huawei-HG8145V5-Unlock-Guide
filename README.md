@@ -1,10 +1,10 @@
 # Huawei HG8145V5 & EG8145V5 Unlock Guide
 
-Panduan ini menjelaskan langkah-langkah untuk membuka (unlock) modem **Huawei HG8145V5** yang masih terkunci oleh provider sehingga menu seperti **WAN** dan **Software Upgrade** dapat digunakan kembali.
+Panduan ini menjelaskan langkah-langkah untuk membuka (unlock) modem **Huawei HG8145V5** dan **EG8145V5** yang masih terkunci oleh provider sehingga menu seperti **WAN** dan **Software Upgrade** dapat digunakan kembali.
 
 > ⚠️ **Peringatan**
 >
-> Panduan ini hanya untuk keperluan edukasi dan teknisi yang memahami risiko modifikasi firmware. Kesalahan saat proses upgrade atau downgrade dapat menyebabkan modem gagal menyala (brick).
+> Panduan ini hanya untuk keperluan edukasi dan teknisi yang memahami risiko modifikasi firmware. Kesalahan saat proses upgrade atau downgrade dapat menyebabkan modem gagal menyala (brick). Lakukan backup konfigurasi modem sebelum memulai.
 
 ---
 
@@ -12,7 +12,7 @@ Panduan ini menjelaskan langkah-langkah untuk membuka (unlock) modem **Huawei HG
 
 | Item | Keterangan |
 |------|------------|
-| Device | HG8145V5 |
+| Device | HG8145V5 / EG8145V5 |
 | Hardware Version | 26AD.A |
 | Software Version | V5R022C10S197 |
 | Provider | Telkom Indonesia |
@@ -21,7 +21,7 @@ Panduan ini menjelaskan langkah-langkah untuk membuka (unlock) modem **Huawei HG
 
 - ❌ Menu WAN tidak tersedia
 - ❌ Menu Software Upgrade tidak tersedia
-- ✅ Masih dapat mengunggah (upload) file konfigurasi
+- ✅ Masih dapat mengunggah (Upload) file konfigurasi
 
 ---
 
@@ -29,7 +29,7 @@ Panduan ini menjelaskan langkah-langkah untuk membuka (unlock) modem **Huawei HG
 
 Pastikan Anda sudah memiliki file berikut:
 
-```
+```text
 2Config-DEFAULT.xml
 R022.bin
 Huawei-Downgrade-Tools.exe
@@ -41,9 +41,135 @@ RollBackCommand.bat
 
 ---
 
+# Persiapan Laptop (Windows 10 & Windows 11)
+
+> **Sangat disarankan melakukan pengecekan berikut sebelum menjalankan proses unlock.**
+
+## 1. Pastikan Telnet Client Sudah Aktif
+
+Huawei PON Tools membutuhkan fitur **Telnet Client** pada Windows.
+
+### Cara Mengecek
+
+1. Tekan **Windows + R**
+2. Ketik:
+
+```text
+optionalfeatures
+```
+
+3. Tekan **Enter**
+4. Cari **Telnet Client**
+5. Pastikan dalam keadaan **✔ Centang (Enabled)**
+
+Jika belum aktif:
+
+- Centang **Telnet Client**
+- Klik **OK**
+- Tunggu proses instalasi selesai.
+
+---
+
+## 2. Jalankan Semua Tools Sebagai Administrator
+
+Semua aplikasi berikut **WAJIB** dijalankan menggunakan hak akses **Administrator**.
+
+- Panda Flasher
+- Huawei-Downgrade-Tools.exe
+- Huawei-PON-Tools-HG8145V5.exe
+- RollBackCommand.bat
+
+Cara menjalankan:
+
+> Klik kanan file → **Run as administrator**
+
+Hal ini untuk menghindari kegagalan akses Telnet, Firewall, maupun hak akses jaringan.
+
+---
+
+## 3. Gunakan IP DHCP Terlebih Dahulu
+
+Sebelum menghubungkan laptop ke modem, pastikan adapter Ethernet menggunakan:
+
+```text
+Obtain an IP address automatically (DHCP)
+```
+
+Jika status Ethernet masih muncul:
+
+```text
+Identifying...
+```
+
+atau
+
+```text
+Unidentified Network
+```
+
+Gunakan IP Static sementara, misalnya:
+
+| Pengaturan | Nilai |
+|------------|--------|
+| IP Address | 192.168.100.100 |
+| Subnet Mask | 255.255.255.0 |
+| Gateway | 192.168.100.1 |
+
+> **Catatan:** Sesuaikan dengan IP default modem apabila berbeda.
+
+---
+
+## 4. Jika Panda Flasher Tidak Menampilkan Progress
+
+Gejala yang biasanya muncul:
+
+- Tidak ada status upload
+- Progress tetap 0%
+- Tidak ada respon sama sekali
+
+Silakan **sementara nonaktifkan Windows Defender Firewall**.
+
+Cara cepat:
+
+```
+Windows Security
+↓
+Firewall & Network Protection
+↓
+Turn Windows Defender Firewall Off
+```
+
+Setelah proses unlock selesai, **aktifkan kembali Firewall** demi keamanan komputer.
+
+---
+
+## 5. Gunakan Kabel LAN yang Baik
+
+Disarankan menggunakan:
+
+- Kabel LAN Cat5e/Cat6
+- Sambungkan langsung dari Laptop ke Port LAN Modem
+- Jangan melalui Switch atau Router
+
+---
+
+## 6. Nonaktifkan VPN
+
+Pastikan VPN seperti berikut tidak sedang aktif:
+
+- Cloudflare WARP
+- ZeroTier
+- Tailscale
+- OpenVPN
+- WireGuard
+
+VPN dapat mengganggu komunikasi antara tools dengan modem.
+
+---
+
 # Langkah 1 — Upload File Konfigurasi
 
-Login ke modem menggunakan akun berikut:
+Login ke modem menggunakan salah satu akun berikut.
 
 | Username | Password |
 |----------|----------|
@@ -51,9 +177,9 @@ Login ke modem menggunakan akun berikut:
 | Support | theworldinyourhand |
 | Admin | admin |
 
-Masuk ke menu **Configuration File** kemudian upload file:
+Masuk ke menu **Configuration File**, kemudian upload file:
 
-```
+```text
 2Config-DEFAULT.xml
 ```
 
@@ -65,25 +191,25 @@ Tunggu hingga proses selesai.
 
 Upload file berikut:
 
-```
+```text
 R022.bin
 ```
 
-Melalui menu:
+melalui menu:
 
-```
+```text
 Software Upgrade
 ```
 
-### Jika menu Software Upgrade tidak tersedia
+## Jika Menu Software Upgrade Tidak Ada
 
 Gunakan aplikasi:
 
-```
+```text
 Panda Flasher
 ```
 
-untuk melakukan upload file tersebut.
+untuk mengunggah file tersebut.
 
 ---
 
@@ -91,27 +217,27 @@ untuk melakukan upload file tersebut.
 
 > **Catatan**
 >
-> Jika firmware modem masih **R021** atau versi yang lebih lama, langkah ini dapat dilewati.
+> Jika firmware modem masih **R021** atau lebih lama, langkah ini dapat dilewati.
 
-Jalankan aplikasi:
+Jalankan:
 
-```
+```text
 Huawei-Downgrade-Tools.exe
 ```
 
-Modem akan melakukan restart.
+Modem akan restart.
 
-Setelah modem hidup kembali:
+Setelah modem menyala kembali:
 
-- Login kembali ke halaman modem.
-- Tampilan halaman akan berubah menjadi **warna merah**.
-- Akan muncul menu **Firmware Upgrade**.
+- Login kembali ke WebUI.
+- Tampilan halaman berubah menjadi **Merah**.
+- Menu **Firmware Upgrade** akan muncul.
 
-### Untuk tipe HG
+### Untuk HG8145V5
 
 Upload firmware:
 
-```
+```text
 HG8145V5-R020-212.bin
 ```
 
@@ -119,11 +245,11 @@ Tunggu modem restart.
 
 ---
 
-### Untuk tipe EG
+### Untuk EG8145V5
 
 Upload firmware:
 
-```
+```text
 EG8145V5-R021-210.bin
 ```
 
@@ -131,11 +257,11 @@ Tunggu modem restart.
 
 ---
 
-### Jika IP modem berubah
+## Jika IP Modem Berubah
 
-Pada beberapa tipe **EG**, setelah downgrade alamat modem berubah menjadi:
+Pada beberapa modem **EG8145V5**, alamat modem berubah menjadi:
 
-```
+```text
 192.168.18.1
 ```
 
@@ -145,9 +271,9 @@ Login menggunakan:
 |----------|----------|
 | Epadmin | adminEp |
 
-Kemudian upload kembali file:
+Kemudian upload kembali:
 
-```
+```text
 2Config-DEFAULT.xml
 ```
 
@@ -155,48 +281,50 @@ Kemudian upload kembali file:
 
 # Langkah 4 — Jalankan Huawei PON Tools
 
-Buka aplikasi:
+Buka:
 
-```
+```text
 Huawei-PON-Tools-HG8145V5.exe
 ```
 
-Kemudian lakukan langkah berikut secara berurutan:
+Lakukan langkah berikut secara berurutan.
 
 1. Klik tombol **1**
 2. Klik tombol **2**
-3. Modem akan restart
-4. Tunggu sekitar **10–20 detik** setelah lampu LAN menyala
+3. Tunggu modem restart
+4. Setelah lampu **LAN menyala**, tunggu sekitar **10–20 detik**
 5. Klik tombol **3**
 6. Klik tombol **4**
-7. Pilih mode yang sesuai:
-   - GPON
-   - EPON
-   - XPON
+7. Pilih mode:
+
+- GPON
+- EPON
+- XPON
+
 8. Klik tombol **5**
 
 Modem akan restart kembali.
 
 ---
 
-# Langkah 5 — Rollback (Opsional)
+# Langkah 5 — Rollback Firmware (Opsional)
 
-Jika ingin mengembalikan firmware ke versi bawaan (R022), jalankan:
+Jika ingin mengembalikan firmware ke versi asli **R022**, jalankan:
 
-```
+```text
 RollBackCommand.bat
 ```
 
-Langkah ini hanya mengembalikan firmware ke versi asli setelah proses unlock selesai.
+Rollback hanya mengembalikan firmware ke versi semula.
 
 ---
 
-# Hasil Setelah Berhasil Unlock
+# Hasil Setelah Unlock Berhasil
 
-Jika seluruh proses berhasil, maka:
+Apabila seluruh proses berhasil:
 
-- ✅ Tampilan web berubah menjadi **warna biru**
-- ✅ Informasi provider berubah menjadi **COMMON**
+- ✅ Tampilan WebUI berubah menjadi **Biru**
+- ✅ Provider berubah menjadi **COMMON**
 - ✅ Menu WAN muncul
 - ✅ Menu Software Upgrade muncul
 - ✅ Vendor Lock berhasil dihapus
@@ -209,14 +337,14 @@ Jika seluruh proses berhasil, maka:
 
 Versi:
 
-```
+```text
 Huawei-PON-Tools-HG8145V5-20260328.exe
 ```
 
 Perubahan:
 
-- Menghapus Vendor Lock GPON (PTCL/Pakistan)
-- Memperbaiki masalah lampu GPON berkedip setiap 2–5 menit
+- Remove Vendor Lock GPON (PTCL/Pakistan)
+- Memperbaiki GPON Blink setiap 2–5 menit
 
 ---
 
@@ -224,89 +352,133 @@ Perubahan:
 
 Versi:
 
-```
+```text
 Huawei-PON-Tools-HG8145V5-20260414.exe
 ```
 
 Perubahan:
 
-- Memperbaiki bug pilihan mode EPON
-- Menambahkan penghapusan Vendor Lock pada mode XPON
+- Perbaikan pilihan mode EPON
+- Penambahan Remove Vendor Lock pada XPON
 
 ---
 
 # Ringkasan Proses
 
 ```text
+Cek Laptop
+│
+├── Telnet Client Enabled
+├── Run Administrator
+├── DHCP / Static IP
+├── Firewall (Jika Diperlukan)
+└── Kabel LAN
+
+        │
+        ▼
+
 Login Modem
-      │
-      ▼
+        │
+        ▼
+
 Upload 2Config-DEFAULT.xml
-      │
-      ▼
+        │
+        ▼
+
 Upload R022.bin
-      │
-      ▼
+        │
+        ▼
+
 Downgrade Firmware (Jika R022)
-      │
-      ▼
-Jalankan Huawei PON Tools
-      │
-      ▼
+        │
+        ▼
+
+Huawei PON Tools
+        │
+        ▼
+
 Pilih GPON / EPON / XPON
-      │
-      ▼
+        │
+        ▼
+
 Modem Restart
-      │
-      ▼
-Selesai Unlock
-      │
-      ▼
-(Opsional)
-Rollback ke Firmware Asli
+        │
+        ▼
+
+Unlock Berhasil
+        │
+        ▼
+
+(Optional)
+Rollback Firmware
 ```
 
 ---
 
 # Troubleshooting
 
-## Menu Software Upgrade tidak muncul
+## Panda Flasher Tidak Berjalan
 
-- Gunakan **Panda Flasher** untuk mengunggah file `R022.bin`.
+- Jalankan sebagai **Administrator**
+- Matikan sementara Windows Defender Firewall
+- Gunakan kabel LAN yang baik
+- Pastikan IP Laptop sudah benar
 
 ---
 
-## Setelah downgrade modem tidak dapat diakses
+## Menu Software Upgrade Tidak Muncul
+
+Gunakan **Panda Flasher** untuk meng-upload file:
+
+```text
+R022.bin
+```
+
+---
+
+## Huawei PON Tools Tidak Bisa Connect
+
+Periksa:
+
+- Telnet Client sudah aktif
+- Firewall dimatikan sementara
+- Jalankan sebagai Administrator
+- Laptop mendapat IP dari modem
+- VPN tidak aktif
+
+---
+
+## Setelah Downgrade Modem Tidak Bisa Diakses
 
 Coba akses:
 
-```
+```text
 http://192.168.18.1
 ```
 
-Login menggunakan:
+Login:
 
-```
+```text
 Username : Epadmin
 Password : adminEp
 ```
 
 ---
 
-## Huawei PON Tools berhenti di tengah proses
+## Huawei PON Tools Berhenti di Tengah Proses
 
-- Pastikan modem sudah selesai restart.
-- Tunggu hingga lampu LAN menyala sebelum melanjutkan ke langkah berikutnya.
-- Jalankan aplikasi sebagai **Administrator**.
+- Tunggu modem selesai restart
+- Pastikan lampu LAN sudah menyala
+- Tunggu sekitar 10–20 detik sebelum klik langkah berikutnya
 
 ---
 
 # Disclaimer
 
-Dokumen ini dibuat hanya sebagai panduan teknis. Segala risiko yang timbul akibat proses upgrade, downgrade, atau modifikasi firmware menjadi tanggung jawab pengguna. Selalu lakukan pencadangan (backup) konfigurasi modem sebelum memulai proses.
+Dokumen ini dibuat sebagai panduan teknis. Seluruh risiko akibat proses upgrade, downgrade, maupun modifikasi firmware menjadi tanggung jawab pengguna. Disarankan melakukan backup konfigurasi modem sebelum memulai.
 
 ---
 
 **Author:** Artha Syarif Athaya  
-**Version:** 1.5  
+**Version:** 2.0  
 **Last Update:** July 2026
