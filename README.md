@@ -4,7 +4,7 @@ Panduan ini menjelaskan langkah-langkah untuk membuka (unlock) modem **Huawei HG
 
 > ⚠️ **Peringatan**
 >
-> Panduan ini hanya untuk keperluan edukasi dan teknisi yang memahami risiko modifikasi firmware. Kesalahan saat proses upgrade atau downgrade dapat menyebabkan modem gagal menyala (brick). Lakukan backup konfigurasi modem sebelum memulai.
+> Panduan ini hanya untuk keperluan edukasi dan teknisi yang memahami risiko modifikasi firmware. Kesalahan saat proses upgrade, downgrade, atau modifikasi firmware dapat menyebabkan modem gagal menyala (*brick*). Selalu lakukan backup konfigurasi modem sebelum memulai.
 
 ---
 
@@ -43,13 +43,13 @@ RollBackCommand.bat
 
 # Persiapan Laptop (Windows 10 & Windows 11)
 
-> **Sangat disarankan melakukan pengecekan berikut sebelum menjalankan proses unlock.**
+Sebelum memulai proses unlock, lakukan pengecekan berikut.
 
-## 1. Pastikan Telnet Client Sudah Aktif
+## 1. Aktifkan Telnet Client
 
-Huawei PON Tools membutuhkan fitur **Telnet Client** pada Windows.
+Huawei PON Tools menggunakan Telnet untuk berkomunikasi dengan modem.
 
-### Cara Mengecek
+### Cara Mengaktifkan
 
 1. Tekan **Windows + R**
 2. Ketik:
@@ -60,41 +60,36 @@ optionalfeatures
 
 3. Tekan **Enter**
 4. Cari **Telnet Client**
-5. Pastikan dalam keadaan **✔ Centang (Enabled)**
-
-Jika belum aktif:
-
-- Centang **Telnet Client**
-- Klik **OK**
-- Tunggu proses instalasi selesai.
+5. Beri tanda centang (**✔**)
+6. Klik **OK**
+7. Tunggu proses instalasi selesai
 
 ---
 
 ## 2. Jalankan Semua Tools Sebagai Administrator
 
-Semua aplikasi berikut **WAJIB** dijalankan menggunakan hak akses **Administrator**.
+Semua aplikasi berikut **WAJIB** dijalankan menggunakan **Run as Administrator**.
 
 - Panda Flasher
 - Huawei-Downgrade-Tools.exe
 - Huawei-PON-Tools-HG8145V5.exe
+- RollBackCommand.bat
 
-Cara menjalankan:
+Caranya:
 
-> Klik kanan file → **Run as administrator**
-
-Hal ini untuk menghindari kegagalan akses Telnet, Firewall, maupun hak akses jaringan.
+> Klik kanan aplikasi → **Run as administrator**
 
 ---
 
-## 3. Gunakan IP DHCP Terlebih Dahulu
+## 3. Gunakan DHCP Terlebih Dahulu
 
-Sebelum menghubungkan laptop ke modem, pastikan adapter Ethernet menggunakan:
+Pastikan adapter Ethernet menggunakan:
 
 ```text
 Obtain an IP address automatically (DHCP)
 ```
 
-Jika status Ethernet masih muncul:
+Jika Ethernet tetap muncul:
 
 ```text
 Identifying...
@@ -106,7 +101,9 @@ atau
 Unidentified Network
 ```
 
-Gunakan IP Static sementara, misalnya:
+Gunakan IP Static sementara.
+
+Contoh:
 
 | Pengaturan | Nilai |
 |------------|--------|
@@ -114,47 +111,35 @@ Gunakan IP Static sementara, misalnya:
 | Subnet Mask | 255.255.255.0 |
 | Gateway | 192.168.100.1 |
 
-> **Catatan:** Sesuaikan dengan IP default modem apabila berbeda.
-
 ---
 
 ## 4. Jika Panda Flasher Tidak Menampilkan Progress
 
-Gejala yang biasanya muncul:
+Apabila Panda Flasher:
 
-- Tidak ada status upload
-- Progress tetap 0%
-- Tidak ada respon sama sekali
+- Tidak ada progress
+- Tidak muncul status upload
+- Berhenti di 0%
 
-Silakan **sementara nonaktifkan Windows Defender Firewall**.
+Silakan **matikan sementara Windows Defender Firewall**.
 
-Cara cepat:
-
-```
-Windows Security
-↓
-Firewall & Network Protection
-↓
-Turn Windows Defender Firewall Off
-```
-
-Setelah proses unlock selesai, **aktifkan kembali Firewall** demi keamanan komputer.
+Setelah proses selesai, aktifkan kembali Firewall.
 
 ---
 
-## 5. Gunakan Kabel LAN yang Baik
+## 5. Gunakan Kabel LAN Langsung
 
-Disarankan menggunakan:
+Disarankan:
 
-- Kabel LAN Cat5e/Cat6
-- Sambungkan langsung dari Laptop ke Port LAN Modem
-- Jangan melalui Switch atau Router
+- Kabel Cat5e atau Cat6
+- Hubungkan Laptop langsung ke Modem
+- Jangan melalui Router atau Switch
 
 ---
 
 ## 6. Nonaktifkan VPN
 
-Pastikan VPN seperti berikut tidak sedang aktif:
+Pastikan VPN berikut tidak aktif.
 
 - Cloudflare WARP
 - ZeroTier
@@ -162,13 +147,21 @@ Pastikan VPN seperti berikut tidak sedang aktif:
 - OpenVPN
 - WireGuard
 
-VPN dapat mengganggu komunikasi antara tools dengan modem.
-
 ---
 
-# Langkah 1 — Upload File Konfigurasi
+# Akses Halaman Konfigurasi Modem
 
-Login ke modem menggunakan salah satu akun berikut.
+Sebelum melakukan upload file konfigurasi, pastikan Anda dapat mengakses halaman WebUI modem.
+
+## HG8145V5
+
+Buka browser kemudian akses:
+
+```text
+http://192.168.100.1
+```
+
+Login menggunakan salah satu akun berikut.
 
 | Username | Password |
 |----------|----------|
@@ -176,25 +169,59 @@ Login ke modem menggunakan salah satu akun berikut.
 | Support | theworldinyourhand |
 | Admin | admin |
 
-Masuk ke menu **Configuration File**, kemudian upload file:
+---
+
+## EG8145V5
+
+Sebagian besar modem **EG8145V5** menggunakan alamat IP:
+
+```text
+http://192.168.18.1
+```
+
+Login menggunakan:
+
+| Username | Password |
+|----------|----------|
+| Epadmin | adminEp |
+
+> **Catatan**
+>
+> Apabila halaman login tidak dapat dibuka:
+>
+> - Pastikan Laptop terhubung langsung ke modem.
+> - Gunakan DHCP terlebih dahulu.
+> - Jika masih belum mendapatkan IP, gunakan IP Static sesuai subnet modem.
+
+---
+
+## Setelah Berhasil Login
+
+Apabila halaman konfigurasi Huawei sudah berhasil terbuka, lanjutkan ke proses berikutnya.
+
+---
+
+# Langkah 1 — Upload File Konfigurasi
+
+Masuk ke menu **Configuration File** kemudian upload file berikut:
 
 ```text
 2Config-DEFAULT.xml
 ```
 
-Tunggu hingga proses selesai.
+Tunggu hingga modem selesai memproses upload.
 
 ---
 
 # Langkah 2 — Upload File Shell
 
-Upload file berikut:
+Upload file berikut.
 
 ```text
 R022.bin
 ```
 
-melalui menu:
+Melalui menu:
 
 ```text
 Software Upgrade
@@ -229,10 +256,10 @@ Modem akan restart.
 Setelah modem menyala kembali:
 
 - Login kembali ke WebUI.
-- Tampilan halaman berubah menjadi **Merah**.
-- Menu **Firmware Upgrade** akan muncul.
+- Tampilan Web berubah menjadi **Merah**.
+- Akan muncul menu **Firmware Upgrade**.
 
-### Untuk HG8145V5
+## Untuk HG8145V5
 
 Upload firmware:
 
@@ -244,7 +271,7 @@ Tunggu modem restart.
 
 ---
 
-### Untuk EG8145V5
+## Untuk EG8145V5
 
 Upload firmware:
 
@@ -254,27 +281,25 @@ EG8145V5-R021-210.bin
 
 Tunggu modem restart.
 
----
-
-## Jika IP Modem Berubah
-
-Pada beberapa modem **EG8145V5**, alamat modem berubah menjadi:
-
-```text
-192.168.18.1
-```
-
-Login menggunakan:
-
-| Username | Password |
-|----------|----------|
-| Epadmin | adminEp |
-
-Kemudian upload kembali:
-
-```text
-2Config-DEFAULT.xml
-```
+> **Catatan**
+>
+> Pada beberapa modem **EG8145V5**, setelah proses downgrade selesai, alamat IP modem akan kembali menjadi:
+>
+> ```text
+> http://192.168.18.1
+> ```
+>
+> Login kembali menggunakan:
+>
+> | Username | Password |
+> |----------|----------|
+> | Epadmin | adminEp |
+>
+> Setelah berhasil masuk ke halaman konfigurasi Huawei, **upload kembali file berikut**:
+>
+> ```text
+> 2Config-DEFAULT.xml
+> ```
 
 ---
 
@@ -286,20 +311,18 @@ Buka:
 Huawei-PON-Tools-HG8145V5.exe
 ```
 
-Lakukan langkah berikut secara berurutan.
+Lakukan secara berurutan.
 
 1. Klik tombol **1**
 2. Klik tombol **2**
-3. Tunggu modem restart
-4. Setelah lampu **LAN menyala**, tunggu sekitar **10–20 detik**
+3. Modem akan restart
+4. Tunggu sekitar **10–20 detik** setelah lampu LAN menyala
 5. Klik tombol **3**
 6. Klik tombol **4**
-7. Pilih mode:
-
-- GPON
-- EPON
-- XPON
-
+7. Pilih salah satu mode:
+   - GPON
+   - EPON
+   - XPON
 8. Klik tombol **5**
 
 Modem akan restart kembali.
@@ -308,19 +331,19 @@ Modem akan restart kembali.
 
 # Langkah 5 — Rollback Firmware (Opsional)
 
-Jika ingin mengembalikan firmware ke versi asli **R022**, jalankan:
+Jika ingin mengembalikan firmware ke versi asli (**R022**), jalankan:
 
 ```text
 RollBackCommand.bat
 ```
 
-Rollback hanya mengembalikan firmware ke versi semula.
+Firmware akan kembali ke versi bawaan, namun hasil unlock tetap dipertahankan.
 
 ---
 
 # Hasil Setelah Unlock Berhasil
 
-Apabila seluruh proses berhasil:
+Apabila seluruh proses berhasil, maka:
 
 - ✅ Tampilan WebUI berubah menjadi **Biru**
 - ✅ Provider berubah menjadi **COMMON**
@@ -365,49 +388,45 @@ Perubahan:
 # Ringkasan Proses
 
 ```text
-Cek Laptop
+Persiapan Laptop
 │
-├── Telnet Client Enabled
-├── Run Administrator
+├── Enable Telnet Client
+├── Run as Administrator
 ├── DHCP / Static IP
-├── Firewall (Jika Diperlukan)
-└── Kabel LAN
-
+├── Disable Firewall (Jika Diperlukan)
+└── Nonaktifkan VPN
         │
         ▼
-
-Login Modem
+Akses WebUI Modem
         │
         ▼
-
+Login
+        │
+        ▼
 Upload 2Config-DEFAULT.xml
         │
         ▼
-
 Upload R022.bin
         │
         ▼
-
 Downgrade Firmware (Jika R022)
         │
         ▼
-
+Upload Config Lagi (Khusus EG Jika Diminta)
+        │
+        ▼
 Huawei PON Tools
         │
         ▼
-
 Pilih GPON / EPON / XPON
         │
         ▼
-
-Modem Restart
+Restart
         │
         ▼
-
 Unlock Berhasil
         │
         ▼
-
 (Optional)
 Rollback Firmware
 ```
@@ -416,18 +435,24 @@ Rollback Firmware
 
 # Troubleshooting
 
-## Panda Flasher Tidak Berjalan
+## Panda Flasher Tidak Ada Progress
 
-- Jalankan sebagai **Administrator**
+- Jalankan sebagai Administrator
 - Matikan sementara Windows Defender Firewall
-- Gunakan kabel LAN yang baik
+- Gunakan kabel LAN langsung
 - Pastikan IP Laptop sudah benar
 
 ---
 
 ## Menu Software Upgrade Tidak Muncul
 
-Gunakan **Panda Flasher** untuk meng-upload file:
+Gunakan:
+
+```text
+Panda Flasher
+```
+
+untuk meng-upload:
 
 ```text
 R022.bin
@@ -437,29 +462,35 @@ R022.bin
 
 ## Huawei PON Tools Tidak Bisa Connect
 
-Periksa:
+Periksa kembali:
 
-- Telnet Client sudah aktif
-- Firewall dimatikan sementara
-- Jalankan sebagai Administrator
-- Laptop mendapat IP dari modem
-- VPN tidak aktif
+- ✔ Telnet Client sudah aktif
+- ✔ Firewall dimatikan sementara
+- ✔ Jalankan sebagai Administrator
+- ✔ Laptop mendapat IP dari modem
+- ✔ VPN tidak aktif
 
 ---
 
-## Setelah Downgrade Modem Tidak Bisa Diakses
+## Setelah Downgrade Tidak Bisa Login
 
-Coba akses:
+Untuk modem **EG8145V5**, coba akses:
 
 ```text
 http://192.168.18.1
 ```
 
-Login:
+Login menggunakan:
 
 ```text
 Username : Epadmin
 Password : adminEp
+```
+
+Kemudian upload kembali:
+
+```text
+2Config-DEFAULT.xml
 ```
 
 ---
@@ -479,5 +510,5 @@ Dokumen ini dibuat sebagai panduan teknis. Seluruh risiko akibat proses upgrade,
 ---
 
 **Author:** Artha Syarif Athaya  
-**Version:** 2.0  
+**Version:** 2.1  
 **Last Update:** July 2026
