@@ -307,6 +307,6 @@ Dokumen ini dibuat hanya sebagai panduan teknis. Segala risiko yang timbul akiba
 
 ---
 
-**Author:** Your Name  
-**Version:** 1.0  
+**Author:** Artha Syarif Athaya  
+**Version:** 1.5  
 **Last Update:** July 2026
