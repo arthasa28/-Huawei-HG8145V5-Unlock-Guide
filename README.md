@@ -493,6 +493,11 @@ Kemudian upload kembali:
 2Config-DEFAULT.xml
 ```
 
+Khusus Relabs
+```text
+HG dan EG8145V5-Relabs.xml
+```
+
 ---
 
 ## Huawei PON Tools Berhenti di Tengah Proses
