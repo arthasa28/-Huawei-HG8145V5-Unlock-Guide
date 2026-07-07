@@ -1,4 +1,4 @@
-# Huawei HG8145V5 Unlock Guide
+# Huawei HG8145V5 & EG8145V5 Unlock Guide
 
 Panduan ini menjelaskan langkah-langkah untuk membuka (unlock) modem **Huawei HG8145V5** yang masih terkunci oleh provider sehingga menu seperti **WAN** dan **Software Upgrade** dapat digunakan kembali.
 
@@ -48,6 +48,8 @@ Login ke modem menggunakan akun berikut:
 | Username | Password |
 |----------|----------|
 | telecomadmin | admintelecom |
+| Support | theworldinyourhand |
+| Admin | admin |
 
 Masuk ke menu **Configuration File** kemudian upload file:
 
